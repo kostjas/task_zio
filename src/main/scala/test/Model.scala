@@ -140,9 +140,6 @@ object Model {
         case (_, _) =>
           val fieldsCombinations = ticket.fields.toList.combinations(minSelectedFields).toList
           val starFieldsCombinations = ticket.starFields.toList.combinations(minSelectedStarFields).toList
-//          starFieldsCombinations.flatMap { el =>
-//            fieldsCombinations.zipAll(List(el), Nil, el).map{case (f, sf) => EuroTicket(f.toSet, sf.toSet)}
-//          }
           (fieldsCombinations, starFieldsCombinations).mapN { (f, sf) => EuroTicket(f.toSet, sf.toSet) }
       }
     }

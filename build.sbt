@@ -17,12 +17,8 @@ resolvers ++= Seq(
 
 // Dependencies
 libraryDependencies ++= Seq(
-//"org.scalaz" %% "scalaz-core" % "7.2.29",
-//"org.scalaz" %% "scalaz-effect" % "7.2.29",
 "dev.zio" %% "zio" % "1.0.0-RC17",
 "org.typelevel" %% "cats-core" % "2.0.0",
-//"org.scalaz" %% "scalaz-zio" % "1.0-RC5",
-//"org.scalaz" %% "scalaz-zio-testkit" % "1.0-RC5" % "test",
 "org.scalatest" %% "scalatest" % "3.1.0" % "test"
 )
 

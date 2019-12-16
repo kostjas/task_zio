@@ -28,9 +28,9 @@ object FileUtils {
   def readTicketFile[T](file: File)(implicit parser: TicketMultiLineParser[T]): IO[String, List[T]] = {
     openFile(file).bracket(bf => closeSource(bf)){ bf =>
       val lines = bf.getLines().toList
-      def parsedLinesResult(lines: List[String]): ZIO[Any, String, List[T]] = {
+      def parsedLinesResult(lines: List[String]): ZIO[Any, String, List[T]] =
         lines.traverse(parser.parse).map(_.flatten).toEither.leftMap(_.toList.mkString("\n")).fold(IO.fail, IO.succeed)
-      }
+
       if (lines.nonEmpty) {
         parsedLinesResult(lines)
       } else {

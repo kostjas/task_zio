@@ -2,14 +2,14 @@ package test
 
 import Model._
 import org.scalatest.Succeeded
-import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
 
 import scala.annotation.tailrec
 import org.scalatest.{Matchers, WordSpec}
 
 class ModelSpec extends WordSpec with Matchers with TableDrivenPropertyChecks {
 
-  val systemEuroSuccesses =
+  val systemEuroSuccesses: TableFor2[Set[Int], Set[Int]] =
     Table(
       ("fields", "starFields"),
       (Set(1,2,32,34,5,45,43,42), Set(2,3,6)),
@@ -19,7 +19,7 @@ class ModelSpec extends WordSpec with Matchers with TableDrivenPropertyChecks {
       (Set(1,2,32,34,5,34,22,44,3,7), Set(3,7,5,4,2))
     )
 
-  val systemEuroFailures =
+  val systemEuroFailures: TableFor2[Set[Int], Set[Int]] =
     Table(
       ("fields", "starFields"),
       (Set(1,2,32,34,5,45,43,42,22,11,12), Set(2,3,5)),
@@ -33,13 +33,13 @@ class ModelSpec extends WordSpec with Matchers with TableDrivenPropertyChecks {
       (Set(1,2,32,34,50), Set(1,4,5,13))
     )
 
-  val euroSuccesses =
+  val euroSuccesses: TableFor2[Set[Int], Set[Int]] =
     Table(
       ("fields", "starFields"),
       (Set(1,2,32,34,5), Set(2,11))
     )
 
-  val euroFailures =
+  val euroFailures: TableFor2[Set[Int], Set[Int]] =
     Table(
       ("fields", "starFields"),
       (Set(1,2,32,34,5,45), Set(2,3)),

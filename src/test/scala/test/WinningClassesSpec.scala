@@ -1,6 +1,6 @@
 package test
 
-import org.scalatest.prop.TableDrivenPropertyChecks
+import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor3}
 import org.scalatest.Matchers
 import org.scalatest.WordSpec
 import test.Model.EuroTicket
@@ -8,7 +8,7 @@ import test.Model.WinningTicket
 
 class WinningClassesSpec extends WordSpec with Matchers with TableDrivenPropertyChecks {
 
-  val winningClassesSuccesses =
+  val winningClassesSuccesses: TableFor3[Int, Int, Int] =
     Table(
       ("fields", "starFields", "winclass"),
       //Winning class 1               5 correct numbers + 2 correct star numbers
@@ -47,7 +47,7 @@ class WinningClassesSpec extends WordSpec with Matchers with TableDrivenProperty
       (0, 0)
     )
 
-  val winEuroTickets =
+  val winEuroTickets: TableFor3[List[Model.Ticket[Model.Euro]], Model.Ticket[Model.Winning], Map[_ <: Int, Int]] =
     Table(
       ("euroTickets", "winTicket", "result"),
       (List(

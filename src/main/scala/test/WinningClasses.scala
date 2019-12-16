@@ -1,6 +1,6 @@
 package test
 
-import test.Model.{Euro, EuroTicket, Ticket, Winning, WinningTicket}
+import test.Model.{Euro, Ticket, Winning}
 
 object WinningClasses {
 

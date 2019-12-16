@@ -1,6 +1,6 @@
 package test
 
-import zio.{IO, ZEnv, ZIO}
+import zio.{ZEnv, ZIO}
 import zio.console._
 import test.Model.{Euro, Ticket, Winning}
 import test.Model.WinningTicket.WinningSingleTicketParser$
