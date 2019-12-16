@@ -13,8 +13,6 @@ object EntryPoint extends App {
     * The world is unsafe and we have to protect ourself using IO monad
     * for input and output operations, also it can be easily composed
     *
-    * Also I am using EitherT monad-transformer here, because there are
-    * two effects: IO operations and errors in the context of disjunction \/
     * The application processes file as a single batch, it expects that all records are correct
     * if some of the records are incorrect, it will reject the whole file, however it accumulates
     * all errors and report all of them

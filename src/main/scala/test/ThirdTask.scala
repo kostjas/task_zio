@@ -20,7 +20,7 @@ object ThirdTask {
     winningTicket <- FileUtils.readSingleLineFile[Ticket[Winning]](winningsTicketFile)
     result = WinningClasses.findWinningTickets(euroTickets, winningTicket)
     _ <- putStrLn(
-      result.map{case (winclazz, amount) => s"Winning class $winclazz - number of winning tickets $amount"}.mkString("\n")
+      result.map { case (winclazz, amount) => s"Winning class $winclazz - number of winning tickets $amount" }.mkString("\n")
     )
   } yield ()
 }
