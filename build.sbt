@@ -9,9 +9,7 @@ scalaVersion := "2.13.1"
 resolvers ++= Seq(
   "Sonatype releases" at "https://oss.sonatype.org/content/repositories/releases/",
   "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
-  "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/",
-  "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases",
-  "Bintray sbt plugin releases" at "http://dl.bintray.com/sbt/sbt-plugin-releases/",
+  ("Bintray sbt plugin releases" at "http://dl.bintray.com/sbt/sbt-plugin-releases/").withAllowInsecureProtocol(true),
   Resolver.mavenLocal
 )
 
