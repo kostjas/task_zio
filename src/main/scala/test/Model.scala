@@ -14,6 +14,11 @@ object Model {
   val permittedFields: Set[Int] = (1 to maxSizeOfFields).toSet
   val permittedStarFields: Set[Int] = (1 to maxSizeOfStarFields).toSet
 
+  object TicketSources {
+    val standard: String = "standard"
+    val system: String = "system"
+  }
+
   sealed trait TicketType
   trait Euro extends TicketType
   trait System extends TicketType
@@ -203,12 +208,12 @@ object Model {
       Validated.catchNonFatal[List[Ticket[Euro]]] {
         val lineContent = line.split(" ")
         require(lineContent.length == 3, "Line must contain three elements, separated by space!")
-        val ticketType = lineContent(0)
-        require(ticketType == "standard" || ticketType == "system", "TicketType can be either standard or system!")
+        val ticketSource = lineContent(0)
+        require(ticketSource == TicketSources.standard || ticketSource == TicketSources.system, "TicketType can be either standard or system!")
         val fields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
         val starFields: Set[Int] = lineContent(2).split(",").map(_.toInt).toSet
 
-        if (ticketType == "standard") {
+        if (ticketSource == TicketSources.standard) {
           List(EuroTicket(fields, starFields))
         } else {
           SystemEuroTicket.allCombinations(SystemEuroTicket(fields, starFields))
