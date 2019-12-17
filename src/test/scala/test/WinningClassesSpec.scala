@@ -1,12 +1,12 @@
 package test
 
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor3}
-import org.scalatest.Matchers
-import org.scalatest.WordSpec
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.should.Matchers
 import test.Model.EuroTicket
 import test.Model.WinningTicket
 
-class WinningClassesSpec extends WordSpec with Matchers with TableDrivenPropertyChecks {
+class WinningClassesSpec extends AnyWordSpec with Matchers with TableDrivenPropertyChecks {
 
   val winningClassesSuccesses: TableFor3[Int, Int, Int] =
     Table(

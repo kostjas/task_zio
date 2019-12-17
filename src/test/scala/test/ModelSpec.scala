@@ -3,11 +3,11 @@ package test
 import Model._
 import org.scalatest.Succeeded
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2}
-
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatest.matchers.should.Matchers
 import scala.annotation.tailrec
-import org.scalatest.{Matchers, WordSpec}
 
-class ModelSpec extends WordSpec with Matchers with TableDrivenPropertyChecks {
+class ModelSpec extends AnyWordSpec with Matchers with TableDrivenPropertyChecks {
 
   val systemEuroSuccesses: TableFor2[Set[Int], Set[Int]] =
     Table(
