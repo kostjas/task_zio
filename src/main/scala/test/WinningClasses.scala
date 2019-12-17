@@ -38,9 +38,8 @@ object WinningClasses {
     WinningClass(2, 0, 13)
   )
 
-  def findWinningClass(amountOfWinningFields: Int, amountOfWinningStarFields: Int): Option[WinningClass] = {
+  def findWinningClass(amountOfWinningFields: Int, amountOfWinningStarFields: Int): Option[WinningClass] =
     winningClasses.find(p => p.correctStarFields == amountOfWinningStarFields && p.correctFields == amountOfWinningFields)
-  }
 
   def findWinningTickets(tickets: List[Ticket[Euro]], winningTicket: Ticket[Winning]): Map[Int, Int] = {
     val winningFieldNumbers = winningTicket.fields

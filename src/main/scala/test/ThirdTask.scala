@@ -4,7 +4,7 @@ import zio.{ZEnv, ZIO}
 import zio.console._
 import test.Model.{Euro, Ticket, Winning}
 import test.Model.WinningTicket.WinningSingleTicketParser$
-import test.EntryPoint.readLn
+import Utils.readLn
 
 
 object ThirdTask {

@@ -2,13 +2,13 @@ package test
 
 import zio.{App, IO, ZEnv, ZIO}
 import zio.console._
+import Utils.readLn
 
 object EntryPoint extends App {
 
   val secondTask = "second"
   val thirdTask = "third"
 
-  val readLn: ZIO[ZEnv, String, String] = getStrLn.mapError(_.getMessage)
   /**
     * The world is unsafe and we have to protect ourself using IO monad
     * for input and output operations, also it can be easily composed
