@@ -1,9 +1,9 @@
-package test
+package task
 
 import zio.{ZEnv, ZIO}
 import zio.console._
-import test.Model.{Simple, Ticket, Winning}
-import test.Model.WinningTicket.WinningSingleTicketParser$
+import task.Model.{Simple, Ticket, Winning}
+import task.Model.WinningTicket.WinningSingleTicketParser$
 import Utils.readLn
 
 

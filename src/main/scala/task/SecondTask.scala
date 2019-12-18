@@ -1,11 +1,11 @@
-package test
+package task
 
-import test.Model.Ticket
-import test.Model.{Advanced => Sys}
-import test.Model.SystemTicket.allCombinations
+import task.Model.Ticket
+import task.Model.{Advanced => Sys}
+import task.Model.SystemTicket.allCombinations
 import zio.{IO, ZIO}
 import zio.console._
-import test.Model.SystemTicket.SystemSingleTicketParser$
+import task.Model.SystemTicket.SystemSingleTicketParser$
 
 object SecondTask {
 

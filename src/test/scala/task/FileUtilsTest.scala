@@ -1,13 +1,13 @@
-package test
+package task
 
 import java.io.File
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import test.Model.{Simple, SystemTicket, Ticket, Winning, WinningTicket, Advanced => Sys}
+import task.Model.{Simple, SystemTicket, Ticket, Winning, WinningTicket, Advanced => Sys}
 import zio._
-import test.Model.SystemTicket.SystemSingleTicketParser$
-import test.Model.WinningTicket.WinningSingleTicketParser$
+import task.Model.SystemTicket.SystemSingleTicketParser$
+import task.Model.WinningTicket.WinningSingleTicketParser$
 import zio.Exit.Failure
 
 class FileUtilsTest extends AnyWordSpec with DefaultRuntime with Matchers {

@@ -1,6 +1,6 @@
-package test
+package task
 
-import test.Model.{Simple, Ticket, Winning}
+import task.Model.{Simple, Ticket, Winning}
 
 object WinningClasses {
 

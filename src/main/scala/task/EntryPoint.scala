@@ -1,4 +1,4 @@
-package test
+package task
 
 import zio.{App, IO, ZEnv, ZIO}
 import zio.console._

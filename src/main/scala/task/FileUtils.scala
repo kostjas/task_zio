@@ -1,9 +1,9 @@
-package test
+package task
 
 import java.io.File
 
-import test.Model.TicketMultiLineParser
-import test.Model.SingleTicketParser
+import task.Model.TicketMultiLineParser
+import task.Model.SingleTicketParser
 
 import scala.io.BufferedSource
 import zio.{IO, ZIO}

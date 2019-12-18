@@ -1,10 +1,10 @@
-package test
+package task
 
 import org.scalatest.prop.{TableDrivenPropertyChecks, TableFor2, TableFor3}
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
-import test.Model.SimpleTicket
-import test.Model.WinningTicket
+import task.Model.SimpleTicket
+import task.Model.WinningTicket
 
 class WinningClassesSpec extends AnyWordSpec with Matchers with TableDrivenPropertyChecks {
 
