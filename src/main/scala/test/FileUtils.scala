@@ -29,7 +29,7 @@ object FileUtils {
     */
   def readTicketFile[T](file: File)(implicit parser: TicketMultiLineParser[T]): IO[String, List[T]] = {
     openFile(file).bracket(bf => closeSource(bf)){ bf =>
-      val lines = bf.getLines().toList
+      val lines = bf.getLines().to(List)
       def parsedLinesResult(lines: List[String]): ZIO[Any, String, List[T]] =
         lines.traverse(parser.parse).map(_.flatten).toEither.leftMap(_.toList.mkString("\n")).fold(IO.fail, IO.succeed)
 
@@ -47,7 +47,7 @@ object FileUtils {
     */
   def readSingleLineFile[T](file: File)(implicit parser: SingleTicketParser[T]): IO[String, T] = {
     openFile(file).bracket.apply(bf => closeSource(bf)){ bf => {
-      val lines = bf.getLines().toList
+      val lines = bf.getLines().to(List)
       lines.isEmpty.?(IO.fail(s"File is empty ${file.getAbsolutePath}"))
         .||(lines.length > 1)(IO.fail(s"File contains more than one line!"))
         .|(IO.fromEither(parser.parse(lines.head)))

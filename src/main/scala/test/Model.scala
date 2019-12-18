@@ -13,8 +13,8 @@ object Model {
   val maxSizeOfFields = 50
   val maxSizeOfAdditionalFields = 11
 
-  val permittedFields: Set[Int] = (1 to maxSizeOfFields).toSet
-  val permittedAdditionalFields: Set[Int] = (1 to maxSizeOfAdditionalFields).toSet
+  val permittedFields: Set[Int] = (1 to maxSizeOfFields).to(Set)
+  val permittedAdditionalFields: Set[Int] = (1 to maxSizeOfAdditionalFields).to(Set)
 
   object TicketSources {
     val standard: String = "standard"
@@ -68,8 +68,8 @@ object Model {
         Try[Ticket[Winning]] {
           val lineContent = line.split(" ")
           require(lineContent.length == 2, "Line must contain two elements, separated by space!")
-          val fields: Set[Int] = lineContent(0).split(",").map(_.toInt).toSet
-          val additionalFields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
+          val fields: Set[Int] = lineContent(0).split(",").map(_.toInt).to(Set)
+          val additionalFields: Set[Int] = lineContent(1).split(",").map(_.toInt).to(Set)
           WinningTicket(fields, additionalFields)
         }.toEither.leftMap(_.getMessage)
       }
@@ -145,9 +145,9 @@ object Model {
           List(SimpleTicket(ticket.fields, ticket.additionalFields))
 
         case (_, _) =>
-          val fieldsCombinations = ticket.fields.toList.combinations(minSelectedFields).toList
-          val additionalFieldsCombinations = ticket.additionalFields.toList.combinations(minSelectedAdditionalFields).toList
-          (fieldsCombinations, additionalFieldsCombinations).mapN { (f, sf) => SimpleTicket(f.toSet, sf.toSet) }
+          val fieldsCombinations = ticket.fields.to(List).combinations(minSelectedFields).to(List)
+          val additionalFieldsCombinations = ticket.additionalFields.to(List).combinations(minSelectedAdditionalFields).to(List)
+          (fieldsCombinations, additionalFieldsCombinations).mapN { (f, sf) => SimpleTicket(f.to(Set), sf.to(Set)) }
       }
     }
 
@@ -166,8 +166,8 @@ object Model {
         Try[Ticket[Advanced]] {
           val lineContent = line.split(" ")
           require(lineContent.length == 2, "Line must contain two elements, separated by space!")
-          val fields: Set[Int] = lineContent(0).split(",").map(_.toInt).toSet
-          val additionalFields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
+          val fields: Set[Int] = lineContent(0).split(",").map(_.toInt).to(Set)
+          val additionalFields: Set[Int] = lineContent(1).split(",").map(_.toInt).to(Set)
           SystemTicket(fields, additionalFields)
         }.toEither.leftMap(_.getMessage)
       }
@@ -212,8 +212,8 @@ object Model {
         require(lineContent.length == 3, "Line must contain three elements, separated by space!")
         val ticketSource = lineContent(0)
         require(ticketSource == TicketSources.standard || ticketSource == TicketSources.system, "TicketType can be either standard or system!")
-        val fields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
-        val additionalFields: Set[Int] = lineContent(2).split(",").map(_.toInt).toSet
+        val fields: Set[Int] = lineContent(1).split(",").map(_.toInt).to(Set)
+        val additionalFields: Set[Int] = lineContent(2).split(",").map(_.toInt).to(Set)
 
         (ticketSource == TicketSources.standard) ? List(SimpleTicket(fields, additionalFields)) | SystemTicket.allCombinations(SystemTicket(fields, additionalFields))
 
