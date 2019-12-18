@@ -4,6 +4,8 @@ import cats._
 import cats.data.{ValidatedNel, _}
 import cats.implicits._
 
+import ToBooleanOps._
+
 import scala.util.Try
 
 object Model {
@@ -213,11 +215,7 @@ object Model {
         val fields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
         val starFields: Set[Int] = lineContent(2).split(",").map(_.toInt).toSet
 
-        if (ticketSource == TicketSources.standard) {
-          List(EuroTicket(fields, starFields))
-        } else {
-          SystemEuroTicket.allCombinations(SystemEuroTicket(fields, starFields))
-        }
+        (ticketSource == TicketSources.standard) ? List(EuroTicket(fields, starFields)) | SystemEuroTicket.allCombinations(SystemEuroTicket(fields, starFields))
 
       }.leftMap(_.getMessage).toValidatedNel
     }

@@ -9,6 +9,8 @@ import scala.io.BufferedSource
 import zio.{IO, ZIO}
 import zio.console.Console.Live.console.putStrLn
 
+import ToBooleanOps._
+
 import cats._
 import cats.data._
 import cats.implicits._
@@ -31,11 +33,7 @@ object FileUtils {
       def parsedLinesResult(lines: List[String]): ZIO[Any, String, List[T]] =
         lines.traverse(parser.parse).map(_.flatten).toEither.leftMap(_.toList.mkString("\n")).fold(IO.fail, IO.succeed)
 
-      if (lines.nonEmpty) {
-        parsedLinesResult(lines)
-      } else {
-        IO.fail[String](s"File is empty ${file.getAbsolutePath}")
-      }
+      lines.nonEmpty ? parsedLinesResult(lines) | IO.fail[String](s"File is empty ${file.getAbsolutePath}")
     }
   }
 
@@ -48,15 +46,11 @@ object FileUtils {
     * Corresponding instance of type class SingleTicketParser should be present in implicit scope, based on type T
     */
   def readSingleLineFile[T](file: File)(implicit parser: SingleTicketParser[T]): IO[String, T] = {
-    openFile(file).bracket.apply(bf => closeSource(bf)){ bf =>
+    openFile(file).bracket.apply(bf => closeSource(bf)){ bf => {
       val lines = bf.getLines().toList
-      if (lines.isEmpty) {
-        IO.fail(s"File is empty ${file.getAbsolutePath}")
-      } else if (lines.length > 1) {
-        IO.fail(s"File contains more than one line!")
-      } else {
-        IO.fromEither(parser.parse(lines.head))
-      }
-    }
+      lines.isEmpty.?(IO.fail(s"File is empty ${file.getAbsolutePath}"))
+        .||(lines.length > 1)(IO.fail(s"File contains more than one line!"))
+        .|(IO.fromEither(parser.parse(lines.head)))
+    }}
   }
 }
