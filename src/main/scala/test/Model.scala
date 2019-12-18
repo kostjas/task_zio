@@ -11,10 +11,10 @@ import scala.util.Try
 object Model {
 
   val maxSizeOfFields = 50
-  val maxSizeOfStarFields = 11
+  val maxSizeOfAdditionalFields = 11
 
   val permittedFields: Set[Int] = (1 to maxSizeOfFields).toSet
-  val permittedStarFields: Set[Int] = (1 to maxSizeOfStarFields).toSet
+  val permittedAdditionalFields: Set[Int] = (1 to maxSizeOfAdditionalFields).toSet
 
   object TicketSources {
     val standard: String = "standard"
@@ -22,35 +22,35 @@ object Model {
   }
 
   sealed trait TicketType
-  trait Euro extends TicketType
-  trait System extends TicketType
+  trait Simple extends TicketType
+  trait Advanced extends TicketType
   trait Winning extends TicketType
 
-  case class Ticket[T <: TicketType](fields: Set[Int], starFields: Set[Int])
+  case class Ticket[T <: TicketType](fields: Set[Int], additionalFields: Set[Int])
 
   object WinningTicket {
     val amountOfSelectedFields = 5
-    val amountSelectedStarFields = 2
+    val amountSelectedAdditionalFields = 2
 
     /**
       * assumptions:
       *
       * amount of selected fields can be 5
-      * amount of selected star fields can be 2
+      * amount of selected additional fields can be 2
       *
       * values of selected fields can be in scope of the range from 1 to 50
-      * values of selected star fields can be in scope of the range from 1 to 11
+      * values of selected additional fields can be in scope of the range from 1 to 11
       *
       */
-    def apply(fields: Set[Int], starFields: Set[Int]): Ticket[Winning] = {
+    def apply(fields: Set[Int], additionalFields: Set[Int]): Ticket[Winning] = {
       require(fields.size == amountOfSelectedFields, s"Max selected Fields must be $amountOfSelectedFields")
-      require(starFields.size == amountSelectedStarFields, s"Max selected StarFields must be $amountSelectedStarFields")
+      require(additionalFields.size == amountSelectedAdditionalFields, s"Max selected AdditionalFields must be $amountSelectedAdditionalFields")
       require(fields.forall(permittedFields.contains),
         s"Selected Fields must be in scope of the range from 1 to $maxSizeOfFields")
-      require(starFields.forall(permittedStarFields.contains),
-        s"Selected StarFields must be in scope of the range from 1 to $maxSizeOfStarFields")
+      require(additionalFields.forall(permittedAdditionalFields.contains),
+        s"Selected Additional Fields must be in scope of the range from 1 to $maxSizeOfAdditionalFields")
 
-      new Ticket[Winning](fields, starFields)
+      new Ticket[Winning](fields, additionalFields)
     }
 
     implicit object WinningSingleTicketParser$ extends SingleTicketParser[Ticket[Winning]] {
@@ -60,7 +60,7 @@ object Model {
         *
         * format of the line is:
         * it contains two "space" separated elements, which elements are coma separated lists
-        * first list represents fields and second one - star fields
+        * first list represents fields and second one - additional fields
         * Example
         * 1,2,32,34,5,45 2,4,5
         */
@@ -69,85 +69,85 @@ object Model {
           val lineContent = line.split(" ")
           require(lineContent.length == 2, "Line must contain two elements, separated by space!")
           val fields: Set[Int] = lineContent(0).split(",").map(_.toInt).toSet
-          val starFields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
-          WinningTicket(fields, starFields)
+          val additionalFields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
+          WinningTicket(fields, additionalFields)
         }.toEither.leftMap(_.getMessage)
       }
     }
   }
 
-  object EuroTicket {
+  object SimpleTicket {
 
     val amountOfSelectedFields = 5
-    val amountSelectedStarFields = 2
+    val amountSelectedAdditionalFields = 2
 
     /**
       * assumptions:
       *
       * amount of selected fields can be 5
-      * amount of selected star fields can be 2
+      * amount of selected additional fields can be 2
       *
       * values of selected fields can be in scope of the range from 1 to 50
-      * values of selected star fields can be in scope of the range from 1 to 11
+      * values of selected additional fields can be in scope of the range from 1 to 11
       *
       */
-    def apply(fields: Set[Int], starFields: Set[Int]): Ticket[Euro] = {
+    def apply(fields: Set[Int], additionalFields: Set[Int]): Ticket[Simple] = {
       require(fields.size == amountOfSelectedFields, s"Max selected Fields must be $amountOfSelectedFields")
-      require(starFields.size == amountSelectedStarFields, s"Max selected StarFields must be $amountSelectedStarFields")
+      require(additionalFields.size == amountSelectedAdditionalFields, s"Max selected additionalFields must be $amountSelectedAdditionalFields")
       require(fields.forall(permittedFields.contains),
         s"Selected Fields must be in scope of the range from 1 to $maxSizeOfFields")
-      require(starFields.forall(permittedStarFields.contains),
-        s"Selected StarFields must be in scope of the range from 1 to $maxSizeOfStarFields")
+      require(additionalFields.forall(permittedAdditionalFields.contains),
+        s"Selected Additional Fields must be in scope of the range from 1 to $maxSizeOfAdditionalFields")
 
-      new Ticket[Euro](fields, starFields)
+      new Ticket[Simple](fields, additionalFields)
     }
   }
 
-  object SystemEuroTicket {
+  object SystemTicket {
 
     val minSelectedFields = 5
-    val minSelectedStarFields = 2
+    val minSelectedAdditionalFields = 2
     val maxSelectedFields: Int = 10
-    val maxSelectedStarFields: Int = 5
+    val maxSelectedAdditionalFields: Int = 5
 
     /**
       * assumptions:
       *
       * amount of selected fields can be in scope of the range from 5 to 10
-      * amount of selected star fields can be in scope of the range from 2 to 5
+      * amount of selected additional fields can be in scope of the range from 2 to 5
       *
       * values of selected fields can be in scope of the range from 1 to 50
-      * values of selected star fields can be in scope of the range from 1 to 11
+      * values of selected additional fields can be in scope of the range from 1 to 11
       *
       */
-    def apply(fields: Set[Int], starFields: Set[Int]): Ticket[System] = {
+    def apply(fields: Set[Int], additionalFields: Set[Int]): Ticket[Advanced] = {
       val fieldsSize = fields.size
 
       require(minSelectedFields <= fieldsSize && fieldsSize <= maxSelectedFields,
         s"Amount of selected fields must be between $minSelectedFields and $maxSelectedFields ")
-      val starFieldsSize = starFields.size
+      val additionalFieldsSize = additionalFields.size
 
-      require(minSelectedStarFields <= starFieldsSize && starFieldsSize <= maxSelectedStarFields,
-        s"Amount of selected StarFields must be between $minSelectedStarFields and $maxSelectedStarFields ")
+      require(minSelectedAdditionalFields <= additionalFieldsSize && additionalFieldsSize <= maxSelectedAdditionalFields,
+        s"Amount of selected Additional Fields must be between $minSelectedAdditionalFields and $maxSelectedAdditionalFields ")
 
       require(fields.forall(permittedFields.contains),
         s"Selected Fields must be in scope of the range from 1 to $maxSizeOfFields")
 
-      require(starFields.forall(permittedStarFields.contains),
-        s"Selected StarFields must be in scope of the range from 1 to $maxSizeOfStarFields")
+      require(additionalFields.forall(permittedAdditionalFields.contains),
+        s"Selected Additional Fields must be in scope of the range from 1 to $maxSizeOfAdditionalFields")
 
-      new Ticket[System](fields, starFields)
+      new Ticket[Advanced](fields, additionalFields)
     }
 
-    def allCombinations(ticket: Ticket[System]): List[Ticket[Euro]] = {
-      (ticket.fields.size, ticket.starFields.size) match {
-        case (fieldsSize, starFieldsSize) if fieldsSize == minSelectedFields && starFieldsSize == minSelectedStarFields =>
-          List(EuroTicket(ticket.fields, ticket.starFields))
+    def allCombinations(ticket: Ticket[Advanced]): List[Ticket[Simple]] = {
+      (ticket.fields.size, ticket.additionalFields.size) match {
+        case (fieldsSize, additionalFieldsSize) if fieldsSize == minSelectedFields && additionalFieldsSize == minSelectedAdditionalFields =>
+          List(SimpleTicket(ticket.fields, ticket.additionalFields))
 
         case (_, _) =>
           val fieldsCombinations = ticket.fields.toList.combinations(minSelectedFields).toList
-          val starFieldsCombinations = ticket.starFields.toList.combinations(minSelectedStarFields).toList
-          (fieldsCombinations, starFieldsCombinations).mapN { (f, sf) => EuroTicket(f.toSet, sf.toSet) }
+          val additionalFieldsCombinations = ticket.additionalFields.toList.combinations(minSelectedAdditionalFields).toList
+          (fieldsCombinations, additionalFieldsCombinations).mapN { (f, sf) => SimpleTicket(f.toSet, sf.toSet) }
       }
     }
 
@@ -156,19 +156,19 @@ object Model {
       *
       * format of the line is:
       * it contains two "space" separated elements, which elements are coma separated lists
-      * first list represents fields and second one - star fields
+      * first list represents fields and second one - additional fields
       * Example
       * 1,2,32,34,5,45 2,4,5
       */
-    implicit object SystemSingleTicketParser$ extends SingleTicketParser[Ticket[System]] {
+    implicit object SystemSingleTicketParser$ extends SingleTicketParser[Ticket[Advanced]] {
 
-      override def parse(line: String): String Either Ticket[System] = {
-        Try[Ticket[System]] {
+      override def parse(line: String): String Either Ticket[Advanced] = {
+        Try[Ticket[Advanced]] {
           val lineContent = line.split(" ")
           require(lineContent.length == 2, "Line must contain two elements, separated by space!")
           val fields: Set[Int] = lineContent(0).split(",").map(_.toInt).toSet
-          val starFields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
-          SystemEuroTicket(fields, starFields)
+          val additionalFields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
+          SystemTicket(fields, additionalFields)
         }.toEither.leftMap(_.getMessage)
       }
     }
@@ -197,7 +197,7 @@ object Model {
     * it contains three "space" separated elements, the very first one is a type of the message
     * standard or system
     * two other "space" separated elements are coma separated lists
-    * first list represents fields and second one - star fields
+    * first list represents fields and second one - additional fields
     * Example
     * standard 1,2,32,5,45 2,4
     * system 1,2,32,34,5,45 3,4,6
@@ -205,17 +205,17 @@ object Model {
     * It returns validation since file lines can contain multiple errors
     * and it needs to accumulate all of them
     */
-  implicit object EuroTicketParser extends TicketMultiLineParser[Ticket[Euro]] {
-    override def parse(line: String): ValidatedNel[String, List[Ticket[Euro]]] = {
-      Validated.catchNonFatal[List[Ticket[Euro]]] {
+  implicit object SimpleTicketParser extends TicketMultiLineParser[Ticket[Simple]] {
+    override def parse(line: String): ValidatedNel[String, List[Ticket[Simple]]] = {
+      Validated.catchNonFatal[List[Ticket[Simple]]] {
         val lineContent = line.split(" ")
         require(lineContent.length == 3, "Line must contain three elements, separated by space!")
         val ticketSource = lineContent(0)
         require(ticketSource == TicketSources.standard || ticketSource == TicketSources.system, "TicketType can be either standard or system!")
         val fields: Set[Int] = lineContent(1).split(",").map(_.toInt).toSet
-        val starFields: Set[Int] = lineContent(2).split(",").map(_.toInt).toSet
+        val additionalFields: Set[Int] = lineContent(2).split(",").map(_.toInt).toSet
 
-        (ticketSource == TicketSources.standard) ? List(EuroTicket(fields, starFields)) | SystemEuroTicket.allCombinations(SystemEuroTicket(fields, starFields))
+        (ticketSource == TicketSources.standard) ? List(SimpleTicket(fields, additionalFields)) | SystemTicket.allCombinations(SystemTicket(fields, additionalFields))
 
       }.leftMap(_.getMessage).toValidatedNel
     }
