@@ -1,5 +1,7 @@
 package task
 
+import scala.language.implicitConversions
+
 final class BooleanOps(self: Boolean) {
 
   final class Conditional[+A](t: => A) {
