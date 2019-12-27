@@ -1,8 +1,8 @@
 package task
 
-import zio.{ZEnv, ZIO}
-import zio.console.getStrLn
+import zio.ZIO
+import zio.console.{Console, getStrLn}
 
 object Utils {
-  val readLn: ZIO[ZEnv, String, String] = getStrLn.mapError(_.getMessage)
+  val readLn: ZIO[Console, String, String] = getStrLn.mapError(_.getMessage)
 }

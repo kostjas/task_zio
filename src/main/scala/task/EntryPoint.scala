@@ -20,13 +20,13 @@ object EntryPoint extends App {
     * Of course in case of huge files we need to use streaming approach, but it wasn't as requirement of this
     * task.
     */
-  val process: ZIO[ZEnv, String, Unit] = for {
+  val process: ZIO[Console, String, Unit] = for {
     _ <- putStrLn(s"Please input task name ('$thirdTask' or '$secondTask') : ")
     input <- readLn
     _ <- processInput(input)
   } yield ()
 
-  def processInput(input: String): ZIO[ZEnv, String, Unit] =
+  def processInput(input: String): ZIO[Console, String, Unit] =
     input match {
       case task if task == secondTask => SecondTask.process
 
