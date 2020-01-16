@@ -1,6 +1,7 @@
 package task
 
 import java.io.File
+import java.net.URI
 
 import task.Model.TicketMultiLineParser
 import task.Model.SingleTicketParser
@@ -14,15 +15,14 @@ import zio.stream.ZStream
 
 object FileUtils {
 
-  // maybe path: String  can be replaced with File
-  private def readFile(path: String): ZStream[Any, String, String] = {
+  private def readFile(path: URI): ZStream[Any, String, String] = {
     def openFile(file: File): ZIO[Any, String, BufferedSource] =
       IO.effect(scala.io.Source.fromFile(file, 1000)).mapError(_.getMessage)
 
     def closeSource(f: BufferedSource): ZIO[Any, Nothing, _] =
       IO.effect(f.close()).catchAll(e => putStrLn(s"Cannot close BufferedSource correctly: ${e.getMessage}"))
 
-    def file(filePath: String): ZIO[Any, String, File] =
+    def file(filePath: URI): ZIO[Any, String, File] =
       IO(new File(filePath)).mapError(_.getMessage).flatMap { file =>
         if (file.exists() && file.isFile && file.canRead) IO.succeed(file) else IO.fail("File cannot be read or doesn't exist!")
       }
@@ -36,7 +36,7 @@ object FileUtils {
     * This function parses file with multiple lines and return list of type T
     * Corresponding instance of type class TicketMultiLineParser should be present in implicit scope, based on type T
     */
-  def readTicketFile[T](path: String)(implicit parser: TicketMultiLineParser[T]): IO[String, List[T]] =
+  def readTicketFile[T](path: URI)(implicit parser: TicketMultiLineParser[T]): IO[String, List[T]] =
     for{
       lines <-  readFile(path).runCollect
       parsed <- {
@@ -52,7 +52,7 @@ object FileUtils {
     * This function parses single line file and return instance of type T
     * Corresponding instance of type class SingleTicketParser should be present in implicit scope, based on type T
     */
-  def readSingleLineFile[T](path: String)(implicit parser: SingleTicketParser[T]): IO[String, T] =
+  def readSingleLineFile[T](path: URI)(implicit parser: SingleTicketParser[T]): IO[String, T] =
     for{
       lines <-  readFile(path).runCollect
       parsed <- lines.isEmpty.?(IO.fail(s"File is empty $path"))
