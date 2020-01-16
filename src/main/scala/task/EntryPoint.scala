@@ -28,9 +28,9 @@ object EntryPoint extends App {
 
   def processInput(input: String): ZIO[Console, String, Unit] =
     input match {
-      case task if task == secondTask => SecondTask.process
+      case `secondTask` => SecondTask.process
 
-      case task if task == thirdTask => ThirdTask.process
+      case `thirdTask` => ThirdTask.process
 
       case task =>
         IO.fail(s"The task name: '$task' is incorrect, only $thirdTask or $secondTask are expected!")

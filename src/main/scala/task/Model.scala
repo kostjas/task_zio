@@ -207,6 +207,7 @@ object Model {
     */
   implicit object SimpleTicketParser extends TicketMultiLineParser[Ticket[Simple]] {
     override def parse(line: String): ValidatedNel[String, List[Ticket[Simple]]] = {
+      // TODO: using Either + for comprehension
       Validated.catchNonFatal[List[Ticket[Simple]]] {
         val lineContent = line.split(" ")
         require(lineContent.length == 3, "Line must contain three elements, separated by space!")

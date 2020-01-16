@@ -12,12 +12,10 @@ object ThirdTask {
   val process: ZIO[Console, String, Unit] = for {
     _ <- putStrLn("Please input absolute path of your file with numbers of tickets: ")
     ticketsFilePath <- readLn
-    ticketsFile <- FileUtils.checkFile(ticketsFilePath)
-    simpleTickets <- FileUtils.readTicketFile[Ticket[Simple]](ticketsFile)
+    simpleTickets <- FileUtils.readTicketFile[Ticket[Simple]](ticketsFilePath)
     _ <- putStrLn("Please input absolute path of your file with numbers of winning tickets: ")
     winningTicketsFilePath <- readLn
-    winningsTicketFile <- FileUtils.checkFile(winningTicketsFilePath)
-    winningTicket <- FileUtils.readSingleLineFile[Ticket[Winning]](winningsTicketFile)
+    winningTicket <- FileUtils.readSingleLineFile[Ticket[Winning]](winningTicketsFilePath)
     result = WinningClasses.findWinningTickets(simpleTickets, winningTicket)
     _ <- putStrLn(
       result.map { case (winclazz, amount) => s"Winning class $winclazz - number of winning tickets $amount" }.mkString("\n")
