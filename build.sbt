@@ -4,7 +4,7 @@ name := """Task"""
 
 version := "0.1.0"
 
-val zioVersion = "1.0.0-RC17"
+val zioVersion = "1.0.0-RC18"
 
 scalaVersion := "2.13.1"
 

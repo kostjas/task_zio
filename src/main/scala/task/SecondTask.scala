@@ -7,14 +7,13 @@ import zio.{IO, ZIO}
 import zio.console._
 import task.Model.SystemTicket.SystemSingleTicketParser$
 import java.net.URI
-import scala.util.Try
 
 object SecondTask {
 
   val process: ZIO[Console, String, Unit] = for {
     _ <- putStrLn("Please input absolute path of your file with system ticket: ")
     filePath <- getStrLn.mapError(_.getMessage)
-    uri <- ZIO.fromTry(Try(URI.create(filePath))).mapError(_.getMessage)
+    uri <- ZIO.effect(URI.create(filePath)).mapError(_.getMessage)
     ticket <- FileUtils.readSingleLineFile[Ticket[Sys]](uri)
     r = allCombinations(ticket)
     _ <- putStrLn("Ticket distributions: ")

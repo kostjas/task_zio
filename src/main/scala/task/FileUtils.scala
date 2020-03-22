@@ -8,7 +8,7 @@ import task.Model.SingleTicketParser
 
 import scala.io.BufferedSource
 import zio.{IO, ZIO, ZManaged}
-import zio.console.Console.Live.console.putStrLn
+import zio.console.{Console, putStrLn}
 import ToBooleanOps._
 import cats.implicits._
 import zio.stream.ZStream
@@ -19,8 +19,7 @@ object FileUtils {
     def openFile(file: File): ZIO[Any, String, BufferedSource] =
       IO.effect(scala.io.Source.fromFile(file, 1000)).mapError(_.getMessage)
 
-    def closeSource(f: BufferedSource): ZIO[Any, Nothing, _] =
-      IO.effect(f.close()).catchAll(e => putStrLn(s"Cannot close BufferedSource correctly: ${e.getMessage}"))
+    def closeSource(f: BufferedSource): ZIO[Any, Nothing, _] = IO.effect(f.close()).orDie
 
     def file(filePath: URI): ZIO[Any, String, File] =
       IO(new File(filePath)).mapError(_.getMessage).flatMap { file =>
